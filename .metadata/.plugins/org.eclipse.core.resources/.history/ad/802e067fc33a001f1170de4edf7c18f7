@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- th:if="${}", th:unless="${}"
+	각각 if와 else를 뜻함 -->
+	
+	
+</body>
+</html>

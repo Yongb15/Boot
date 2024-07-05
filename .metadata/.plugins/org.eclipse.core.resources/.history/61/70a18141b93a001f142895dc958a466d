@@ -1,0 +1,14 @@
+package com.korea.first;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+// @Confuguration, @EnableAutoConfiguration, @ComponentScan 세 가지를 하나로 합친 어노테이션
+public class Ex0704Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Ex0704Application.class, args);
+	}
+
+}

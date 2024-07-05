@@ -1,0 +1,8 @@
+package com.korea.first.controller;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class ThymeController {
+	
+}

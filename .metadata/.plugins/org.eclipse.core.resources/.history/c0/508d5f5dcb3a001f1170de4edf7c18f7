@@ -1,0 +1,11 @@
+package com.korea.first.vo;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+public class MemberVO {
+	private final String name;
+	private int age;
+}
