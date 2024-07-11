@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- 자바스크립트 인라이닝 -->
+	<script>
+		let firstName = /* [[${firstName}]] */ ""
+		let lastName = /* [[${lastName}]] */ "testName"
+		let arr = /* [[${list}]] */ ""
+		let userObj = /* [[${member}]] */ ""
+	</script>
+	
+	<script th:inline="javascript">
+		let firstName2 = /* [[${firstName}]] */ ""
+		let lastName2 = /* [[${lastName}]] */ "testName"
+		let arr2 = /* [[${list}]] */ ""
+		let userObj2 = /* [[${member}]] */ ""
+	</script>
+</body>
+</html>

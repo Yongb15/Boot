@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- th:object
+	th:object와 *{}, th:field 이 3개를 사용하면 <form>를 편리하게 사용할 수 있다.
+	th:object : 커맨드 객체를 지정한다.
+		- 단, 정보를 model에 담아서 넘겨줘야 한다. 
+		- 등록 폼이기 때문에 데이터가 비어있는 빈 오브젝트를 만들어 전달해줘야한다.
+	커맨드 객체 : request를 통해 들어온 요청 파라미터들을 setter를 이용해 객체에 정의되어 있는 속성에 바인딩되는 객체 -> vo객체 
+	
+	*{...} : th:object에서 선택한 객체에 접근한다. 
+	
+	th:field : HTML 태그의 id, name, value 속성을 자동으로 만들어준다.
+		- input에 적용하는 속성
+		- id와 name은 th:field에서 지정한 변수의 이름과 같게 만들어진다. -->
+	<form th:object=${vo} th:action="@{/result}" method="post">
+		이름 : <input th:field="*{name}">
+		나이 : <input th:field="*{age}">
+		<input type="submit" value="전송">
+	</form>
+</body>
+</html>
