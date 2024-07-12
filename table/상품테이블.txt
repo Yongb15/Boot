@@ -1,0 +1,11 @@
+-- 시퀀스
+create sequence seq_product;
+
+create table product (
+	product_id number primary key,
+	product_name varchar2(500) not null,
+	product_stock number default 0,
+	product_price number default 0,
+	register_date date default sysdate,
+	update_date date default sysdate
+);

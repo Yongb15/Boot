@@ -8,4 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 				// 메서드명은 Mapper.xml 파일의 id와 맞춰야한다.
 public interface TimeMapper {
 	
+	public String getTime();			// 메서드명이 id로 사용된다.	/ 1 대 1 매칭이 되어야한다.
+	
+	
 }

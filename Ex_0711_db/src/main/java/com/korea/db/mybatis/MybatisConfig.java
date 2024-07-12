@@ -18,7 +18,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 public class MybatisConfig {
 
-	@ConfigurationProperties(prefix="spring.datasouce.hikari")
+	@ConfigurationProperties(prefix="spring.datasource.hikari")
 	@Bean
 	public HikariConfig hikariConfig() {
 		return new HikariConfig();

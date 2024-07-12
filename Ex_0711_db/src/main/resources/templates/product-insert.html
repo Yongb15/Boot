@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>상품 추가</title>
+</head>
+<body>
+	<form th:action="@{/register}" th:object="${productVO}" method="post">	<!-- post로 다시 넘김 --> 
+		<div>
+			<input th:field="*{productName}">
+		</div>
+		<div>
+			<input th:field="*{productStock}">
+		</div>
+		<div>
+			<input th:field="*{productPrice}">
+		</div>
+		<input type="submit" value="등록">
+	</form>
+</body>
+</html>

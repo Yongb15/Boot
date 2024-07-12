@@ -1,0 +1,10 @@
+product 조회
+select하면 product 테이블에서 조회가 가능
+하나의 행들이 productVO객체
+그 후 조회된 행들을 arrayList<>로 묶어야한다 그걸 mapper로 돌려줌
+
+추가되는 과정
+/register -> product-insert -> Controller -> Mapper -> xml -> Mapper -> Controller -> productMapper.insert(productVO);로 돌아오고 return new RedirectView("list"); 실행 
+
+조회되는 과정
+-> /list -> Controller -> Mapper -> xml -> Mapper -> Controller -> product-list.html
