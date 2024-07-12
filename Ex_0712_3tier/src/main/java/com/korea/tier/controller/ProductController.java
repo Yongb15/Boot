@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.korea.tier.service.ProductService;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/product/*")
 public class ProductController {
 	
 	final ProductService productService;
@@ -24,7 +26,7 @@ public class ProductController {
 	@GetMapping("register")			// Get요청
 	public String register(Model model) {
 		model.addAttribute("productVO", new ProductVO());
-		return "product-insert";			// -> templates의 product-insert로 넘어감
+		return "product/product-insert";			// -> templates의 product-insert로 넘어감
 	}
 	
 	@PostMapping("register")
@@ -43,6 +45,6 @@ public class ProductController {
 		
 		// model에 바인딩하기
 		model.addAttribute("list", list);
-		return "product-list";
+		return "product/product-list";
 	}
 }
