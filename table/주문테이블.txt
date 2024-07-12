@@ -1,0 +1,11 @@
+-- 시퀀스 생성
+create sequence seq_order;
+
+-- 테이블 생성
+create table "order"(
+	order_id number primary key,
+	product_id number not null,
+	product_count number default 1,
+	order_date date default sysdate,
+	constraint fk_order_product foreign key(product_id) references product(product_id)
+);
