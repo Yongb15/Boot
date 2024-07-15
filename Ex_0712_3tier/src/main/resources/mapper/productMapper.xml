@@ -9,4 +9,12 @@
 	<select id="selectAll">
 		select * from product			<!-- 3 -->
 	</select>
+	
+	<!-- id : updateStock
+	주문한 개수만큼 재고 업데이트 하기 -->
+	
+	<update id="updateStock">
+		update product set product_stock = product_stock - #{productCount}
+		where product_id = #{productId}
+	</update>
 </mapper>

@@ -2,9 +2,10 @@ package com.korea.tier.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.korea.tier.dao.ProductDAO;
 import com.korea.tier.vo.ProductVO;
-
 import lombok.RequiredArgsConstructor;
 
 // service가 필요한 이유
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 // notice List()와 board List() -> service -> Controller
 // 여러 기능이 추가될 때 controller는 건들지 않고 이전 과정에서 수정하므로 확장 가능성, 유지보수 가능성을 염두해두므로 service를 만들어 준다.
 
+@Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
 

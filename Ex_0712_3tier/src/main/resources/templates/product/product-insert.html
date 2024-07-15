@@ -5,7 +5,7 @@
 <title>상품 추가</title>
 </head>
 <body>
-	<form th:action="@{/register}" th:object="${productVO}" method="post">	<!-- post로 다시 넘김 --> 
+	<form th:action="@{/product/register}" th:object="${productVO}" method="post">	<!-- post로 다시 넘김 --> 
 		<div>
 			<input th:field="*{productName}">
 		</div>

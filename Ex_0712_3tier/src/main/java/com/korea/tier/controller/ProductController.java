@@ -23,7 +23,8 @@ public class ProductController {
 	
 	// @RequestMapping (Get요청과 Post요청 둘 다 받을 수 있다.)
 	
-	@GetMapping("register")			// Get요청
+	// @RequestMapping("/product/*")가 controller 위에 있다면 /product/register로 접근!
+	@GetMapping("register")							// Get요청
 	public String register(Model model) {
 		model.addAttribute("productVO", new ProductVO());
 		return "product/product-insert";			// -> templates의 product-insert로 넘어감

@@ -2,5 +2,10 @@
 	  
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    
+<!-- 별칭 주기 -->
+    <typeAliases> 
+    	<typeAlias type="com.korea.tier.vo.ProductVO" alias="productVO"/>
+    	<typeAlias type="com.korea.tier.vo.OrderVO" alias="orderVO"/>
+    	<!--                               클래스이름           별칭 / 대소문자 구분 -->
+    </typeAliases>
 </configuration>
