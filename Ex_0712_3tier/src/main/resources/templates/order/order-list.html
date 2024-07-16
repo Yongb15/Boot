@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	span { cursor : pointer; }
+	span.on { font-weight:bold; }
+	#container { margin:0 auto; width:1000px; }
+	table { width:100%; }
+	button { width : 100%; }
+	
+</style>
+</head>
+<body>
+	<div id="container">
+		<div class="sort">
+			<span class="on" id="recent" data-sort="recent">최신순</span>
+			<span class="" id="money" data-sort="money">결제 금액순</span>
+		</div>
+		<table border="1">
+			<tr>
+				<th>상품 이름</th>
+				<th>상품 가격</th>
+				<th>주문 개수</th>
+				<th>결제 금액</th>
+				<th>주문 날짜</th>
+			</tr>
+			<th:block th:each="order : ${orders}">
+				<tr th:object="${order}">
+					<td th:text="*{productName}"></td>
+					<td th:text="*{productPrice}"></td>
+					<td th:text="*{productCount}"></td>
+					<td th:text="*{orderPrice}"></td>
+					<td th:text="*{orderDate}"></td>
+				 </tr>
+			 </th:block>
+			 <button type="button" onclick="location.href='/product/list'">상품 목록</button>
+		</table>
+	</div>
+</body>
+<script src = "https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script th:inline="javascript">
+	let sort = [[${sort}]]
+	const $spans = $("div.sort span")
+	
+	$("span").attr("class","");				// span 태그의 class 값을 전부 ""로 만든다.
+	$("span#"+sort).attr("class", "on");	// 속성을 on으로 변경
+	
+	$spans.on("click", function() {
+		location.href=`/order/list?sort=${$(this).data("sort")}`;		// 누른 span태그의 sort라는 데이터셋에 값이 들어옴
+	})
+</script>
+</html>

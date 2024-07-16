@@ -26,7 +26,7 @@
 				<th>주문 개수</th>
 				<th>상품 번호</th>
 				<th>상품 이름</th>
-				<th>상품 제목</th>
+				<th>상품 개수</th>
 				<th>상품 가격</th>
 				<th>등록 날짜</th>
 				<th>수정 날짜</th>
@@ -44,14 +44,14 @@
 				</tr>
 			</th:block>
 		</table>
-		<button type="button" id="order-done">주문완료</button>		<!-- 주문완료를 누르면 GetMapping("done")으로 이동 / 눌렀을 때 이벤트 발생 -->
+		<button type="button" id="order-done">주문완료</button><button type="button" onclick="location.href='/order/list'">주문내역</button>		<!-- 주문완료를 누르면 GetMapping("done")으로 이동 / 눌렀을 때 이벤트 발생 -->
 	</div>
 	<form th:action="@{/order/done}" method="get" name="order-form">
 		<input type="hidden" name="productId">
 		<input type="hidden" name="productCount">
 	</form>
 </body>
-<script src = "https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src = "https://code.jquery.com/jquery-3.7.1.min.js"></script>		<!-- 안에 쓴 코드는 동작 X -->
 <script>
 	const $radios = $("input[type='radio']")			// input 태그 중 type 속성이 radio인 모든 요소 선택
 	const $inputs = $("input[class='productCount']")	// input 태그 중 class 속성이 productCount인 모든 요소 선택
@@ -82,7 +82,7 @@
 			console.log("상품 번호 : " + $form.find("input[name='productId']").val());
 			console.log("주문 개수 : " + $form.find("input[name='productCount']").val());
 			
-			$form.submit();
+			$form.submit();				// th:action="@{/order/done}"으로 이동
 		}
 	});
 </script>

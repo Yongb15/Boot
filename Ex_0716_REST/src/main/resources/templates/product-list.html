@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>상품 목록</title>
+<style type="text/css">
+	div {
+		margin : 0 auto;
+		width : 1000px;
+	}
+	
+	table {
+		width : 100%;
+	}
+	
+	button {
+		width : 50%;
+	}
+</style>
+</head>
+<body>
+	<div id="container">
+		<button type="button" class="register-ready">상품추가</button>
+		<div class="register-wrap" th:object="${productForm}">
+			<div><input th:field="*{productName}" placeholder="상품 이름"></div>
+			<div><input th:field="*{productStock}" placeholder="상품 재고"></div>
+			<div><input th:field="*{productPrice}" placeholder="상품 가격"></div>
+			<input type="button" class="register-done" value="등록">
+		</div>
+	
+		<table border="1">
+			<tr>
+				<th>단일 선택</th>
+				<th>주문 개수</th>
+				<th>상품 번호</th>
+				<th>상품 이름</th>
+				<th>상품 개수</th>
+				<th>상품 가격</th>
+				<th>등록 날짜</th>
+				<th>수정 날짜</th>
+			</tr>
+			<th:block th:each="product : ${list}">
+				<tr th:object="${product}">
+					<td><input type="radio" name="productId" th:value="*{productId}"></td>
+					<td><input type="text" class="productCount" readOnly></td>
+					<td th:text="*{productId}"></td>
+					<td th:text="*{productName}"></td>
+					<td th:text="*{productStock}"></td>
+					<td th:text="*{productPrice}"></td>
+					<td th:text="*{registerDate}"></td>
+					<td th:text="*{updateDate}"></td>
+				</tr>
+			</th:block>
+		</table>
+		<button type="button" id="order-done">주문완료</button><button type="button" onclick="location.href='/order/list'">주문내역</button>		<!-- 주문완료를 누르면 GetMapping("done")으로 이동 / 눌렀을 때 이벤트 발생 -->
+	</div>
+	<form th:action="@{/order/done}" method="get" name="order-form">
+		<input type="hidden" name="productId">
+		<input type="hidden" name="productCount">
+	</form>
+</body>
+<script src = "https://code.jquery.com/jquery-3.7.1.min.js"></script>		<!-- 안에 쓴 코드는 동작 X -->
+<script>
+	const $radios = $("input[type='radio']")			// input 태그 중 type 속성이 radio인 모든 요소 선택
+	const $inputs = $("input[class='productCount']")	// input 태그 중 class 속성이 productCount인 모든 요소 선택
+	const $done = $("#order-done");						// id 값이 order-done인 요소 선택
+	const $form = $("form[name='order-form']")			// name 속성이 order-form인 form 태그 선택
+	
+	let $temp, i;		// temp는 임시로 저장할 변수, i는 선택된 라디오 버튼의 인덱스를 저장
+	
+	$radios.on("click", function() {
+		i = $radios.index(this);			// i에다가 선택한 라디오 버튼의 index 값을 저장
+		
+		if($temp) {
+			$temp.prop("readOnly", true);	// readOnly 속성을 true로 바꿈
+			$temp.val("");
+		}
+		
+		$inputs.eq(i).prop("readOnly", false);		// 클릭된 라디오 버튼에 해당하는 입력필드를 선택하고, readOnly 속성을 false로 변경하여 입력이 가능한 상태로 변경한다.
+	
+		$temp = $inputs.eq(i);				// $temp에다 선택된 input 태그의 정보를 넣는다.
+	});
+	
+	// 주문 완료 버튼을 눌렀을 때 productId와 productCount 값을 input 태그에 전달을 해야 한다.
+	$done.on("click", function() {
+		if(i + 1) {
+			$form.find("input[name='productId']").val($radios.eq(i).val());		// form 태그에서 name 값이 productId인 input 태그를 찾아서, 선택된 라디오버튼의 value 값을 넣는다.
+			$form.find("input[name='productCount']").val($inputs.eq(i).val());	// form 태그에서 name 값이 productCount인 input 태그를 찾아서, 작성된 input 태그의 value 값을 대입한다.
+			
+			console.log("상품 번호 : " + $form.find("input[name='productId']").val());
+			console.log("주문 개수 : " + $form.find("input[name='productCount']").val());
+			
+			$form.submit();				// th:action="@{/order/done}"으로 이동
+		}
+	});
+</script>
+</html>

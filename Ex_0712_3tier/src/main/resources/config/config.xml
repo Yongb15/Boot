@@ -6,6 +6,7 @@
     <typeAliases> 
     	<typeAlias type="com.korea.tier.vo.ProductVO" alias="productVO"/>
     	<typeAlias type="com.korea.tier.vo.OrderVO" alias="orderVO"/>
+    	<typeAlias type="com.korea.tier.dto.OrderDTO" alias="orderDTO"/>
     	<!--                               클래스이름           별칭 / 대소문자 구분 -->
     </typeAliases>
 </configuration>

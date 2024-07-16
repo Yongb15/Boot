@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.korea.rest.mapper.ProductMapper">
+	<insert id="insert">
+			insert into product (product_id, product_name, product_stock, product_price)
+			values(seq_product.nextval, #{productName}, #{productStock}, #{productPrice})
+	</insert>
+	
+	<select id="selectAll">
+		select * from product			<!-- 3 -->
+	</select>
+	
+	<!-- id : updateStock
+	주문한 개수만큼 재고 업데이트 하기 -->
+	
+	<update id="updateStock">
+		update product set product_stock = product_stock - #{productCount}
+		where product_id = #{productId}
+	</update>
+</mapper>

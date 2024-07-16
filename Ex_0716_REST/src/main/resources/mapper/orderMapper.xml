@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.korea.rest.mapper.OrderMapper">
+	<insert id="insert">
+			insert into "order" (order_id, product_id, product_count)
+			values(seq_order.nextval, #{productId}, #{productCount})
+	</insert>
+	
+	<select id="selectAll">
+		select p.product_ID, product_name, product_stock, product_price, register_date, update_date, order_id, product_count, order_date, product_price * product_count order_price 
+		from product p join "order" o
+		on p.product_id = o.product_id			<!-- 3 -->
+		
+		<choose>	<!-- order by 정렬이므로 select 안에 적어야 동작이 가능하다 -->
+			<when test="sort == 'recent'.toString()">
+				order by order_id DESC
+			</when>
+			<otherwise>
+				order by order_price DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

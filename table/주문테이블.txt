@@ -3,9 +3,11 @@ create sequence seq_order;
 
 -- 테이블 생성
 create table "order"(
-	order_id number primary key,
-	product_id number not null,
-	product_count number default 1,
-	order_date date default sysdate,
+	order_id number primary key,				-- 주문 번호
+	product_id number not null,				-- 상품 번호
+	product_count number default 1,			-- 주문 개수
+	order_date date default sysdate,			-- 주문 날짜
 	constraint fk_order_product foreign key(product_id) references product(product_id)
 );
+
+<OrderDTO> findAll()
