@@ -17,4 +17,8 @@
 		update product set product_stock = product_stock - #{productCount}
 		where product_id = #{productId}
 	</update>
+	
+	<select id="select">
+		select * from product where product_id = #{productId}
+	</select>
 </mapper>

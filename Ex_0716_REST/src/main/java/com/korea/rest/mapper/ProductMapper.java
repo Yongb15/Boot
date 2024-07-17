@@ -18,4 +18,6 @@ public interface ProductMapper {
 	
 	// 재고수정
 	public void updateStock(OrderVO orderVO);
+	
+	public ProductVO select(int productId);
 }

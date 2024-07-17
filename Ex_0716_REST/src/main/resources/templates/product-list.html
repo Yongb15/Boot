@@ -16,10 +16,49 @@
 	button {
 		width : 50%;
 	}
+	
+	/* 상품 추가 버튼에 너비를 100%로 만들기 */
+	button.register-ready {
+		width : 100%;
+	}
+	
+	input.register-done {
+		width : 100%;
+	}	
+	
+	/* 상품추가 form 안보이게 만들기 */
+	div.register-wrap {
+		width:500px;
+		display: none;
+	}
+	
+	div.register-wrap div {
+		width : 100%;
+	}
+	
+	div.register-wrap input {
+		width : 100%;
+	}
+	
+	span {
+		cursor :pointer;
+	}
+	
+	span.on {
+		font-weight : bold;
+	}
+	
+	#container {
+		display : none;
+	}
+	
+	div.sort {
+		text-align : right;
+	}
 </style>
 </head>
 <body>
-	<div id="container">
+	<div>
 		<button type="button" class="register-ready">상품추가</button>
 		<div class="register-wrap" th:object="${productForm}">
 			<div><input th:field="*{productName}" placeholder="상품 이름"></div>
@@ -52,12 +91,15 @@
 				</tr>
 			</th:block>
 		</table>
-		<button type="button" id="order-done">주문완료</button><button type="button" onclick="location.href='/order/list'">주문내역</button>		<!-- 주문완료를 누르면 GetMapping("done")으로 이동 / 눌렀을 때 이벤트 발생 -->
+		<button type="button" id="order-done">주문완료</button><button type="button" id="order-list">주문내역</button>		<!-- 주문완료를 누르면 GetMapping("done")으로 이동 / 눌렀을 때 이벤트 발생 -->
 	</div>
-	<form th:action="@{/order/done}" method="get" name="order-form">
-		<input type="hidden" name="productId">
-		<input type="hidden" name="productCount">
-	</form>
+	<div id="container">
+		<div class="sort">
+			<span class="on" id="recent" data-sort="recent">최신순</span>
+			<span class="" id="money" data-sort="money">결제 금액순</span>
+		</div>
+		<div class="order-list"></div>
+	</div>
 </body>
 <script src = "https://code.jquery.com/jquery-3.7.1.min.js"></script>		<!-- 안에 쓴 코드는 동작 X -->
 <script>
@@ -68,6 +110,9 @@
 	
 	let $temp, i;		// temp는 임시로 저장할 변수, i는 선택된 라디오 버튼의 인덱스를 저장
 	
+	const $ids = $("input[name='productId']")
+	
+	// ------------- 주문 기능 ---------------
 	$radios.on("click", function() {
 		i = $radios.index(this);			// i에다가 선택한 라디오 버튼의 index 값을 저장
 		
@@ -83,15 +128,146 @@
 	
 	// 주문 완료 버튼을 눌렀을 때 productId와 productCount 값을 input 태그에 전달을 해야 한다.
 	$done.on("click", function() {
-		if(i + 1) {
-			$form.find("input[name='productId']").val($radios.eq(i).val());		// form 태그에서 name 값이 productId인 input 태그를 찾아서, 선택된 라디오버튼의 value 값을 넣는다.
-			$form.find("input[name='productCount']").val($inputs.eq(i).val());	// form 태그에서 name 값이 productCount인 input 태그를 찾아서, 작성된 input 태그의 value 값을 대입한다.
-			
-			console.log("상품 번호 : " + $form.find("input[name='productId']").val());
-			console.log("주문 개수 : " + $form.find("input[name='productCount']").val());
-			
-			$form.submit();				// th:action="@{/order/done}"으로 이동
-		}
+		// if(i + 1) {
+		//	$form.find("input[name='productId']").val($radios.eq(i).val());		// form 태그에서 name 값이 productId인 input 태그를 찾아서, 선택된 라디오버튼의 value 값을 넣는다.
+		//	$form.find("input[name='productCount']").val($inputs.eq(i).val());	// form 태그에서 name 값이 productCount인 input 태그를 찾아서, 작성된 input 태그의 value 값을 대입한다.
+		//	
+		//	console.log("상품 번호 : " + $form.find("input[name='productId']").val());
+		//	console.log("주문 개수 : " + $form.find("input[name='productCount']").val());
+		//	
+		//	$form.submit();				// th:action="@{/order/done}"으로 이동
+		//}
+		$.ajax({
+			url : "/order/write",				// 주문완료 버튼을 눌렀을 때 실행
+			type : "post",
+			data : JSON.stringify({productId : $ids.eq(i).val(), productCount : $inputs.eq(i).val()}),		// 상품에 대한 정보와 개수를 가지고 OrderController로 이동 - 1
+			contentType : "application/json; charset=utf-8",
+			success : function() {		// 주문이 성공했을 경우
+				// 주문이 성공했다면 재고를 감소시켜야 함!
+				$.ajax({
+					url : "/product/" + $ids.eq(i).val(),						// productId
+					success : function(products) {
+						console.log(products.productStock);
+						$($("tr").eq(i + 1).children()).eq(4).text(products.productStock);		// i + 1 번째 행의 자식(td) 그 중에서 4번째에 text를 업데이트한 재고로 수정함!
+					}
+				});
+				
+				orderList.click();
+			}
+		
+		})
+		
 	});
+	
+	// ------------------------------------
+	
+	// 상품 추가 버튼을 눌렀을 때 입력폼이 보이게 하기
+	const $registerReady = $("button.register-ready");				// 상품 추가 버튼
+	const $registerDone = $("input.register-done");					// 상품 등록 버튼
+	
+	// 상품 추가 버튼을 눌렀을 때 입력폼이 보이게 하기
+	$registerReady.on("click", function() {							// 이벤트 처리 방법
+		
+		$(this).hide();						// 숨기기
+	
+		// 상품추가 폼 보이게 하기
+		// 폼 div태그.show();
+		
+		$("div.register-wrap").show();
+	})
+	
+	// 등록 버튼을 눌렀을 때 입력 폼 숨기고 상품 추가 버튼 보이게 하기
+	$registerDone.on("click", function() {
+		
+		/*
+		$("div.register-wrap").hide();
+		
+		$registerReady.show();
+		*/
+		// ajax 사용
+		$.ajax({
+			url:"new",				// URL 요청
+			type:"post",			// 전송 방식
+			
+			// 상품 이름, 상품 개수, 상품 가격
+			// 요청과 함께 전송할 데이터 설정
+			// 자바 스크립트 객체 형태로 전달하기 위해 JSON.stringify()를 사용한다.
+			data:JSON.stringify({productName:$("#productName").val(), productStock:$("#productStock").val(), productPrice:$("#productPrice").val()}),
+			
+			// 요청 콘텐츠 타입을 JSON으로 설정하겠다.
+			contentType:"application/json; charset=utf-8",
+			
+			// 성공적으로 처리된 경우 실행될 콜백 함수!
+			success:function() {
+				// 현재 페이지 새로고침
+				location.reload();
+			}
+		});
+		
+		// ----------------------------------------------------
+	})
+	
+	// 주문내역 버튼을 눌렀을 때 ajax를 이용해 아래에 주문내역 테이블이 뜨도록 코드 작성하기
+	
+	let sort;
+	const $spans = $("div.sort span");				// div 태그에 class 값이 sort인 span들을 의미
+	const $orderList = $("button#order-list");		// button인데 id가 order-list인 경우
+	
+	//
+	$spans.on("click", function() {
+		
+		$spans.attr("class", "");					// 클래스를 비우고
+		$(this).attr("class", "on");				// 현재 클래스에서 on!
+		$orderList.click();
+	})
+	
+	// 주문내역 버튼을 누르면 아래에 뜨게 만들기
+	let isOpen = false;
+	
+	$orderList.on("click", function() {
+
+			$("#container").show();
+
+		
+		// 최신순/결제금액순 정렬하기
+		$spans.each((i, span) => {					// 익명 함수
+			if($(span).attr("class")) {				// 매개변수인 span을 의미 / each로 할 경우 sort의 클래스를 하나씩 꺼냄 / 비어있는 문자열은 false 비어있지 않으면 true 
+				sort = $(span).data("sort");		// data-sort에 들어있는 값을 변수 sort에 대입 / 선택된 태그에서 data-sort 속성에서 값을 가져와서 sort 변수에 대입하라 -> ajax에서 xml에까지 전달 가능
+			}				
+		})
+		
+		$("span").attr("class", "");
+		$("span#" + sort).attr("class", "on");
+		$.ajax({
+			url : "/order/list/" + sort,						// select한 list를
+			success : function(orders) {				// 여기에 넣음
+				let text = 	`<table border="1">
+								<tr>
+									<th>상품 이름</th>
+									<th>상품 가격</th>
+									<th>주문 개수</th>
+									<th>결제 금액</th>
+									<th>주문 날짜</th>
+								</tr>
+							`;
+				
+				orders.forEach(order => {
+					text +=	`<tr>
+								<td>${order.productName}</td>
+								<td>${order.productPrice}</td>
+								<td>${order.productCount}</td>
+								<td>${order.orderPrice}</td>
+								<td>${order.orderDate}</td>
+							</tr>`
+				})
+				
+				text += `</table>`;
+				
+				$("div.order-list").html(text);
+			}
+		})
+		
+		// ----------------------------------------------------------------
+	})
 </script>
 </html>

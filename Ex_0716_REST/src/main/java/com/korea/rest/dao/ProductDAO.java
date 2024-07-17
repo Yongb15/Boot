@@ -26,9 +26,12 @@ public class ProductDAO {
 		return productMapper.selectAll();
 	}
 	
-	
 	// 재고 수정
 	public void setProductStock(OrderVO orderVO) {
 		productMapper.updateStock(orderVO);
+	}
+	
+	public ProductVO findById(int productId) {
+		return productMapper.select(productId);
 	}
 }

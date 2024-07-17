@@ -11,4 +11,7 @@ public interface ProductService {
 	
 	// 상품 조회
 	public List<ProductVO> getList();
+	
+	// 상품 한건 조회
+	public ProductVO getProduct(int productId);
 }
