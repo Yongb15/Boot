@@ -39,10 +39,17 @@ public class ProductController {
 		productService.register(productVO);
 	}
 	
+	// 업데이트된 재고를 조회
 	@GetMapping("{productId}")
 	@ResponseBody
 	public ProductVO getProduct(@PathVariable("productId") int productId) {
 		
 		return productService.getProduct(productId);
 	}
+	
+	// HTTP 공부하기!
+	// DB도 다룰줄 알아야 함!
+	// 로직을 구현!(Java 등등) -> 프로젝트의 구성(아키텍처)
+	// @PutMapping
+	// @DeleteMapping
 }

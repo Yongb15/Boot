@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.korea.board.mapper.BoardMapper">
+	<!-- 페이지별 게시물 조회
+	순위를 매겨서 1페이지는 1 ~ 10등, 2페이지 11 ~ 20등까지 조회 등등 -->
+	<select id="selectList">	<!-- 결과물을 Mapper가 가짐 -->
+		select * from (select rank() over(order by REF DESC, step) NO, b.* from board b)			<!-- b.*이 게시판 테이블의 모든 내용 / Rank부터 순위테이블에 모든 번호? -->
+		where no between #{start} and #{end}
+	</select>
+	<select id="getRowTotal">
+		select count(*) from board;
+	</select>
+</mapper>

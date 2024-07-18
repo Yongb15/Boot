@@ -1,0 +1,3 @@
+xml -> mapper -> dao -> service -> controller -> html
+
+페이지별 게시글 조회
