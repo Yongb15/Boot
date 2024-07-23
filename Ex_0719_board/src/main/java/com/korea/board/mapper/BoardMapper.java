@@ -22,4 +22,8 @@ public interface BoardMapper {
 	
 	public int insert(BoardVO vo);
 	
+	public int del_update(BoardVO vo);
+
+	public int reply(BoardVO vo);
+	
 }

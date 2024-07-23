@@ -23,7 +23,17 @@
 	</update>
 	
 	<insert id="insert">
-		insert into board values(seq_board_idx_nextval, #{name}, #{subject}, #{content}, #{pwd}, #{ip}, sysdate, 0, seq_board_idx.currval, 0, 0, 0)
+		insert into board values(seq_board_idx.nextval, #{name}, #{subject}, #{content}, #{pwd}, #{ip}, sysdate, 0, seq_board_idx.currval, 0, 0, 0)	
+	</insert>
+	
+	<update id="del_update">
+		update board
+		set name=#{name}, subject=#{subject}, delinfo=-1
+		where idx = #{idx}
+	</update>
+	
+	<insert id="reply">
+		insert into board values(seq_board_idx.nextval, #{name}, #{subject}, #{content}, #{pwd}, #{ip}, sysdate, 0, seq_board_idx.currval, #{ref} + 1, #{step} + 1, #{depth} + 1)	
 	</insert>
 </mapper>
 

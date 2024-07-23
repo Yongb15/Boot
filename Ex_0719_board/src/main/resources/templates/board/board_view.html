@@ -36,32 +36,56 @@
 				<a th:href="@{/board/board_list(page=${param.page})}">
 					<img src="/img/btn_list.gif">
 				</a>
-				<th:block th:if="${vo.depth lt 1}">
-					<img src="/img/btn_reply.gif" onclick="reply()">
-				</th:block>
-				<img src="/img/btn_delete.gif" id="del()">
+					<th:block th:if="${vo.depth lt 1}">
+						<img src="/img/btn_reply.gif" id="reply">
+					</th:block>
+				<img src="/img/btn_delete.gif"  id="del">
 			</td>
 		</tr>
 	</table>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script type="text/javascript">
+<script th:inline="javascript">
 	// 입력한 비밀번호와 원본 비밀번호를 비교
-	// ajax를 이용해서 idx를 json으로 보내고 수정하고 목록으로 돌아가기
-	// window.location.href="/board/board_list?page="+$page;
-	let pwd = /*[[${vo.pwd}]]*/""	// 원본 비밀번호
-	
+
+	let $pwd = /*[[${vo.pwd}]]*/""	// 원본 비밀번호 / controller에서 view 
+	let $idx = /*[[${vo.idx}]]*/""	// 글 번호
+	// 삭제 기능
 	$("img[id='del']").on("click", function() {
 		if(!confirm("삭제하시겠습니까?")) {
 			return;
 		}
 		
+		// 입력한 비밀번호
 		let $c_pwd = $("input[type='password']").val();
 		
 		if($pwd != $c_pwd) {
 			alert("비밀번호 불일치");
 			return;
 		}
+		
+		// ajax를 이용해서 idx를 json으로 보내고 수정하고 목록으로 돌아가기
+		// url : /board/del
+		// type : POST
+		// data : idx
+		// dataType : json
+		// contentType : "application/json; charset=utf-8"
+		
+		$.ajax({
+			url : "/board/del",
+			type : "POST",
+			data : JSON.stringify({idx : $idx}),
+			dataType : "json",
+			contentType : "application/json; charset=utf-8",
+			success : function(data) {
+				alert("삭제 성공!");
+				window.location.href="/board/board_list";
+			}
+		});		
+	})
+	
+	$("img[id='reply']").on("click", function() {
+		location.href="reply_form?idx="+$idx
 	})
 </script>
 </html>

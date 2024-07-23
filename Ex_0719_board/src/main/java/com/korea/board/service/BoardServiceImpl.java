@@ -41,6 +41,16 @@ public class BoardServiceImpl implements BoardService {
 		return boardDAO.insert(vo);
 	}
 
+	@Override
+	public int del_update(BoardVO vo) {
+		return boardDAO.del_update(vo);
+	}
+
+	@Override
+	public int reply(BoardVO vo) {
+		return boardDAO.reply(vo);
+	}
+
 
 
 }

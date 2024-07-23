@@ -2,6 +2,7 @@ package com.korea.board.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.korea.board.common.Common;
 import com.korea.board.common.Common.Board;
+import com.korea.board.dao.BoardDAO;
 import com.korea.board.service.BoardService;
 import com.korea.board.util.Paging;
 import com.korea.board.vo.BoardVO;
@@ -107,6 +111,63 @@ public class BoardController {
 		vo.setIp(ip);
 		
 		int res = boardService.insert(vo);
+		
+		if(res > 0) {
+			return new RedirectView("/board/board_list");
+		}
+		return null;
+	}
+	
+	@PostMapping("del")
+	@ResponseBody			// ajax일때 붙여야 함 @@ResponseBody / view에서 전달됨
+	public String del(@RequestBody String body) {
+		ObjectMapper om = new ObjectMapper();
+		Map<String, String> data = null;
+		
+		try {					// 매개변수인 body를 넣음
+			data = om.readValue(body, new TypeReference<Map<String, String>>() {});		// ? 왜 try-catch로 함?
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		int intIdx = Integer.parseInt(data.get("idx"));
+		
+		BoardVO vo = boardService.selectOne(intIdx);
+		
+		vo.setSubject("이미 삭제된 글입니다.");
+		vo.setName("unknown");
+		
+		int res = boardService.del_update(vo);
+		
+		if(res > 0) {
+			return "{\"param\":\"success\"}";
+		}
+		return "{\"param\":\"fail\"}";
+	}
+	
+	@GetMapping("reply_form")
+	public String reply_form(Model model, int idx)
+	{
+		model.addAttribute("vo", new BoardVO());
+		model.addAttribute("idx", idx);
+		
+		// 반환값에다가 내가 보내줄 view의 경로
+		return "/board/reply_form";
+	}
+	
+	@PostMapping("reply")
+	public RedirectView reply(BoardVO vo, @RequestParam(required=false, defaultValue="1")int page, int idx)
+	{
+		// 넘어온 데이터
+		// 작성자, 제목, 내용, 비밀번호
+		String ip = request.getRemoteAddr();
+		
+		vo.setIp(ip);
+		
+		
+		
+		
+		int res = boardService.reply(vo);
 		
 		if(res > 0) {
 			return new RedirectView("/board/board_list");

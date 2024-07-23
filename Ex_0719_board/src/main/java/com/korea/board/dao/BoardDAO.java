@@ -38,5 +38,11 @@ public class BoardDAO {
 		return boardMapper.insert(vo);
 	}
 	
+	public int del_update(BoardVO vo) {
+		return boardMapper.del_update(vo);
+	}
 	
+	public int reply(BoardVO vo) {
+		return boardMapper.reply(vo);
+	}
 }
