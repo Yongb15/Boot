@@ -19,6 +19,8 @@ public interface BoardService {
 	
 	public int del_update(BoardVO vo);
 
+	public int board_update_step(BoardVO vo);
+
 	public int reply(BoardVO vo);
 
 }

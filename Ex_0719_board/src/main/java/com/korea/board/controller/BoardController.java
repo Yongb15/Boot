@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +20,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.korea.board.common.Common;
 import com.korea.board.common.Common.Board;
-import com.korea.board.dao.BoardDAO;
 import com.korea.board.service.BoardService;
+import com.korea.board.service.MemberService;
 import com.korea.board.util.Paging;
 import com.korea.board.vo.BoardVO;
+import com.korea.board.vo.MemberVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 
 	private final BoardService boardService;
+	private final MemberService memberService;
 	
 	@Autowired
 	HttpSession session;
@@ -156,22 +159,67 @@ public class BoardController {
 	}
 	
 	@PostMapping("reply")
-	public RedirectView reply(BoardVO vo, @RequestParam(required=false, defaultValue="1")int page, int idx)
-	{
-		// 넘어온 데이터
-		// 작성자, 제목, 내용, 비밀번호
+	public RedirectView reply(BoardVO vo, int idx, @RequestParam(defaultValue="1")int page)
+	{	
 		String ip = request.getRemoteAddr();
+		
+		// 기준글의 idx를 이용하여 댓글을 달고싶은 게시글의 정보 가져오기
+		BoardVO base_vo = boardService.selectOne(idx);
+		
+		// 기준글에 step 이상값은 step = step + 1 처리
+		int res = boardService.board_update_step(base_vo);
 		
 		vo.setIp(ip);
 		
+		// 답글이 들어갈 위치 선정
+		vo.setRef(base_vo.getRef());
+		vo.setStep(base_vo.getStep() + 1);
+		vo.setDepth(base_vo.getDepth() + 1);
 		
-		
-		
-		int res = boardService.reply(vo);
+		res = boardService.reply(vo);
 		
 		if(res > 0) {
 			return new RedirectView("/board/board_list");
 		}
 		return null;
+	}
+	
+	@GetMapping("login_form")
+	public String login_form(@ModelAttribute("vo") MemberVO vo)
+	{
+		// 반환값에다가 내가 보내줄 view의 경로
+		return "/board/login_form";
+	}
+	
+	@PostMapping("login")
+	@ResponseBody
+	public String login(@RequestBody String body) {
+		ObjectMapper om = new ObjectMapper();
+		
+		Map<String, String> data = null;			// key 값을 통해서 value를 얻어옴
+		
+		try {
+			data = om.readValue(body, new TypeReference<Map<String, String>>() {});
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		String id = data.get("id");
+		String pwd = data.get("pwd");	
+		
+		MemberVO vo = memberService.loginCheck(id);
+		
+		if(vo == null || !vo.getPwd().equals(pwd)) {
+			return "{\"param\":\"no\"}";
+		}
+		
+		session.setAttribute("id", vo);
+		return "{\"param\":\"yes\"}";
+	}
+	
+	@GetMapping("logout")
+	public RedirectView logout() {
+		session.removeAttribute("id");
+		return new RedirectView("/board/board_list");
 	}
 }

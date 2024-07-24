@@ -25,5 +25,6 @@ public interface BoardMapper {
 	public int del_update(BoardVO vo);
 
 	public int reply(BoardVO vo);
-	
+
+	public int board_update_step(BoardVO vo);
 }

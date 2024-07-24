@@ -47,9 +47,15 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	public int board_update_step(BoardVO vo) {
+		return boardDAO.board_update_step(vo);
+	}
+
+	@Override
 	public int reply(BoardVO vo) {
 		return boardDAO.reply(vo);
 	}
+
 
 
 

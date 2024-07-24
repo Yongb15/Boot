@@ -45,9 +45,9 @@ public class Paging {
 		if(isPrevPage) {
 			sb.append("<a href='"+pageURL+"?page=");
 			sb.append(startPage -1);
-			sb.append("'><img src='resources/img/btn_prev.gif'></a>");
+			sb.append("'><img src='/img/btn_prev.gif'></a>");
 		} else {
-			sb.append("<img src='resources/img/btn_prev.gif'>");
+			sb.append("<img src='/img/btn_prev.gif'>");
 		}
 		//----페이지목록출력-------------------------------
 		sb.append(" ");
@@ -72,9 +72,9 @@ public class Paging {
 		if(isNextPage) {
 			sb.append("<a href='"+pageURL+"?page=");
 			sb.append(endPage + 1);
-			sb.append("'><img src='resources/img/btn_next.gif'></a>");
+			sb.append("'><img src='/img/btn_next.gif'></a>");
 		} else {
-			sb.append("<img src='resources/img/btn_next.gif'>");
+			sb.append("<img src='/img/btn_next.gif'>");
 		}
 		
 		return sb.toString();

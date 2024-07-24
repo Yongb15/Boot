@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form name="f" th:action="@{/board/login}" th:object="${vo}" method="post">
+		<input type="hidden" name="page" th:value="${param.page}">
+		<table border="1" align="center">
+			<caption>:::로그인:::</caption>
+			<tr>
+				<th>아이디</th>
+				<td><input th:field="*{id}" name="id"></td>
+			</tr>
+			<tr>
+				<th>비밀번호</th>
+				<td><input th:field="*{pwd}" type="password" name="pwd"></td>
+			</tr>
+			<tr>
+				<td colsapn="2">
+					<input type="button" value="로그인" name="login">
+				</td>
+			</tr>
+		</table>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:inline="javascript">
+	let $loginButton = $("input[name='login']");
+	
+	$loginButton.on("click", function() {
+		let $id = $("input[name='id']").val();
+		let $pwd = $("input[name='pwd']").val();
+		
+		if($id == '') {
+			alert('아이디를 입력하세요!')
+			return;
+		}
+		
+		if($pwd == '') {
+			alert('비밀번호를 입력하세요!')
+			return;
+		}
+		
+		$.ajax({
+			url : "/board/login",
+			type : "POST",
+			data : JSON.stringify({id : $id, pwd : $pwd}),
+			dataType : "json",
+			contentType : "application/json; charset=utf-8",
+			success : function(data) {
+				if(data["param"] == 'no') {
+					alert('아이디나 비밀번호가 틀렸습니다.');
+					return;
+				}
+				else if(data["param"] == 'yes') {
+					alert("로그인 성공!");
+					window.location.href="/board/board_list";
+				}
+				else {
+					alert('에러발생')
+					return;
+				}
+			}
+		});	
+	})
+</script>
+</html>

@@ -45,4 +45,8 @@ public class BoardDAO {
 	public int reply(BoardVO vo) {
 		return boardMapper.reply(vo);
 	}
+
+	public int board_update_step(BoardVO vo) {
+		return boardMapper.board_update_step(vo);
+	}
 }

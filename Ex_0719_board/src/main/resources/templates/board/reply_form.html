@@ -26,66 +26,27 @@
 			</tr>
 			<tr>
 				<td colsapn="2">
-					<img src="/img/btn_modify.gif" id="reply">
+					<img src="/img/btn_modify.gif" id="send_check" style="cursor:pointer">
 					<a th:href="@{/board/board_list(page=${param.page})}">
 						<img src="/img/btn_list.gif" style="cursor:pointer">
 					</a>
 				</td>
 			</tr>
 		</table>
+	</form>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script th:inline="javascript">
+	const $sendBtn = $("img#send_check");
+	
+	$sendBtn.on("click", function() {
+		$("form[name='f']").submit();
+		
+	})
+	
 	let $pwd = /*[[${vo.pwd}]]*/""	// 원본 비밀번호 / controller에서 view 
 	let $idx = /*[[${vo.idx}]]*/""	// 글 번호
 	
-		$("img[id='reply']").on("click", function() {
-			if(!confirm("수정하시겠습니까?")) {
-				return;
-			}
-			
-			if($subject == "") {
-				alert("제목을 적어주세요");
-				return;
-			}
-			
-			if($name == "") {
-				alert("이름을 적어주세요");
-				return;
-			}
-			
-			if($content == "") {
-				alert("내용을 적어주세요");
-				return;
-			}
-			
-			// 입력한 비밀번호
-			let $c_pwd = $("input[type='password']").val();
-			
-			if($pwd != $c_pwd) {
-				alert("비밀번호 불일치");
-				return;
-			}
-			
-			// ajax를 이용해서 idx를 json으로 보내고 수정하고 목록으로 돌아가기
-			// url : /board/reply
-			// type : POST
-			// data : idx
-			// dataType : json
-			// contentType : "application/json; charset=utf-8"
-			
-			$.ajax({
-				url : "/board/reply",
-				type : "POST",
-				data : JSON.stringify({idx : $idx}),
-				dataType : "json",
-				contentType : "application/json; charset=utf-8",
-				success : function(data) {
-					alert("수정 성공!");
-					window.location.href="/board/board_list";
-				}
-			});		
-		})
 	
 </script>
 </html>

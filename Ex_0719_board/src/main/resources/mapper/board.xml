@@ -32,8 +32,16 @@
 		where idx = #{idx}
 	</update>
 	
+	<update id="board_update_step">
+		update board
+		set step = step + 1
+		where ref = #{ref} and step > #{step}
+	</update>
+	
 	<insert id="reply">
-		insert into board values(seq_board_idx.nextval, #{name}, #{subject}, #{content}, #{pwd}, #{ip}, sysdate, 0, seq_board_idx.currval, #{ref} + 1, #{step} + 1, #{depth} + 1)	
+		insert into board values(
+			seq_board_idx.nextval, #{name}, #{subject}, #{content}, #{pwd}, #{ip}, sysdate, 0, #{ref}, #{step}, #{depth}, 0	
+		)
 	</insert>
 </mapper>
 

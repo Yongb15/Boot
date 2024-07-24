@@ -16,6 +16,19 @@
 <body>
 	<table border="1" width="700">
 		<tr>
+			<td colspan="5" align="right">
+			<!-- 로그인을 안했을 때는 로그인, 회원가입 버튼이 나오게 하기
+				 로그인을 했을 때는 로그아웃 버튼이 보이게 하기 -->
+				<th:block th:if="${session.id == null}">			<!-- 로그인이 되었는지 확인 -->
+					<input type="button" value="로그인" name="login_form">
+					<input type="button" value="회원가입" name="join">
+				</th:block>
+				<th:block th:unless="${session.id == null}">		<!-- 로그인이 되었는지 확인 -->
+					<input type="button" value="로그아웃" name="logout">
+				</th:block>
+			</td>
+		</tr>		 
+		<tr>
 			<td colspan="5"><img src="/img/title_04.gif"></td>
 		</tr>
 		<tr>
@@ -81,6 +94,18 @@
 	//pageMenu라는 id를 가진 div에 pageMenu값 넣기
 	$("#pageMenu").html(pageMenu);
 	
+	// 로그인 클릭시 login_form으로 이동
+	let $loginButton = $("input[name='login_form']");
+	
+	$loginButton.on("click", function() {
+		location.href="/board/login_form";
+	})
+	
+	let $logoutButton = $("input[name='logout']");
+	
+	$logoutButton.on("click", function() {
+		location.href="/board/logout";
+	})
 </script>
 </html>
 

@@ -1,0 +1,13 @@
+로그인 기능 만들기
+
+1. 로그인 창으로 이동하기
+mapping : /board/login_form
+
+login_form.html
+
+2. 로그인 기능 만들기
+2-1 아이디 비밀번호 입력했는지 검증
+2-2(ajax를 이용) 아이디 또는 비밀번호가 틀렸습니다 OR 로그인 성공 알림을 띄우고 메인 페이지로 이동하기
+
+mapping : /board/login
+data : id, pwd
