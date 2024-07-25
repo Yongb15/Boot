@@ -222,4 +222,47 @@ public class BoardController {
 		session.removeAttribute("id");
 		return new RedirectView("/board/board_list");
 	}
+	
+	@GetMapping("member_insert_form")
+	public String member_insert_form(@ModelAttribute("vo") MemberVO vo)
+	{
+		// 반환값에다가 내가 보내줄 view의 경로
+		return "/board/member_insert_form";
+	}
+	
+	@PostMapping("check_id")
+	@ResponseBody
+	public String check_id(@RequestBody String id) {
+		ObjectMapper om = new ObjectMapper();
+		
+		Map<String, String> data = null;			// key 값을 통해서 value를 얻어옴
+		
+		try {
+			data = om.readValue(id, new TypeReference<Map<String, String>>() {});
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		id = data.get("id");	
+		
+		MemberVO vo = memberService.checkId(id);
+		
+		if(vo == null) {
+			return "{\"param\":\"yes\"}";
+		}
+		session.setAttribute("id", vo);
+		return "{\"param\":\"no\"}";
+	}
+	
+	@PostMapping("join")
+	public RedirectView join(MemberVO vo)					// list로 돌아가려면 RedirectView를 사용해야 함
+	{	
+		// DB에 추가하고 board_list로 돌아오기
+		int res = memberService.join(vo);
+		
+		if(res > 0) {
+			return new RedirectView("/board/board_list");
+		}
+		return null;
+	}
 }

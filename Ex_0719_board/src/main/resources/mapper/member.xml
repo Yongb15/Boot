@@ -4,6 +4,14 @@
 	<select id="loginCheck">
 		SELECT * FROM Member where Id=#{id}
 	</select>
+	
+	<select id="checkId">
+		SELECT * FROM Member where Id=#{id}
+	</select>
+	
+	<insert id="join">
+		insert into member values(seq_board_idx.nextval, #{name}, #{id}, #{pwd}, #{email})	
+	</insert>
 </mapper>
 
 

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form name="f" th:action="@{/board/join}" th:object="${vo}" method="post">
+		<input type="hidden" name="page" th:value="${param.page}">
+		<table border="1" align="center">
+			<caption>:::회원가입:::</caption>
+			<tr>
+				<th>아이디</th>
+				<td><input th:field="*{id}" name="id">&nbsp<input type="button" value="중복체크" name="check"></input></td>
+			</tr>
+			<tr>
+				<th>비밀번호</th>
+				<td><input th:field="*{pwd}" type="password" name="pwd"></td>
+			</tr>
+			<tr>
+				<th>이름</th>
+				<td><input th:field="*{name}"  name="name"></td>
+			</tr>
+			<tr>
+				<th>이메일</th>
+				<td><input th:field="*{email}" type="email" name="email"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="button" value="가입" name="join">
+					<a th:href="@{/board/board_list}">
+						<input type="button" value="취소" name="cancel">
+					</a>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:inline="javascript">
+	// 중복체크하기
+	// 아이디가 존재하면 중복되는 아이디입니다.
+	// 아이디가 없으면 사용가능한 아이디입니다. 경고창으로 띄우기
+	const $id_check = $("input[name='check']");		
+	
+	$id_check.on("click", function() {
+		let $id = $("input[name='id']").val();
+		// console.log("id : " + $id);
+		let $b_idCheck = false;	
+		
+		if($id == '') {
+			alert("아이디를 입력하세요!");
+			return;
+		}
+		
+		// ajax 사용 
+		$.ajax({
+			url : "/board/check_id",
+			type : "POST",
+			data : JSON.stringify({id : $id}),
+			dataType : "json",
+			contentType : "application/json; charset=utf-8",
+			success : function(data) {
+				if(data["param"] == 'no') {
+					alert('중복된 아이디입니다.');
+					return;
+				}
+				else {
+					alert('사용 가능한 아이디입니다.');
+					$b_idCheck = true;
+					return;
+				}
+			}
+		})
+		
+		$("input[name='id']").change(function() {
+			$b_idCheck = false;
+		})
+		
+		const $sendBtn = $("input[name='join']");
+	
+		$sendBtn.on("click", function() {
+			// form 태그 검색하기
+			$("form[name='f']").submit();
+		})
+	});
+</script>
+</html>

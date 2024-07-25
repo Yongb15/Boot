@@ -14,7 +14,7 @@
 </style>
 </head>
 <body>
-	<table border="1" width="700">
+	<table border="1" width="700" align="center">
 		<tr>
 			<td colspan="5" align="right">
 			<!-- 로그인을 안했을 때는 로그인, 회원가입 버튼이 나오게 하기
@@ -105,6 +105,12 @@
 	
 	$logoutButton.on("click", function() {
 		location.href="/board/logout";
+	})
+	
+	let $joinButton = $("input[name='join']");
+	
+	$joinButton.on("click", function() {
+		location.href="/board/member_insert_form"; // controller로 이동
 	})
 </script>
 </html>
